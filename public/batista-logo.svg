@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 250" role="img" aria-labelledby="title desc">
+  <title id="title">Batista Mecânica e Guinchos</title>
+  <desc id="desc">Logotipo branco e vermelho da Batista sobre fundo preto.</desc>
+  <rect width="760" height="250" rx="18" fill="#080808"/>
+  <text x="380" y="112" fill="#fff" text-anchor="middle" font-family="Arial Black, Impact, sans-serif" font-size="98" font-weight="900" font-style="italic" letter-spacing="4">BATISTA</text>
+  <path d="M164 136H596M164 151H596" stroke="#c62828" stroke-width="7"/>
+  <text x="380" y="205" fill="#fff" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="32" font-weight="600" letter-spacing="3">MECÂNICA <tspan fill="#c62828">|</tspan> GUINCHOS</text>
+</svg>

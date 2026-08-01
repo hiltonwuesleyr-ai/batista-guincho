@@ -2,23 +2,26 @@
 
 import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
 import {
-  ArrowDown, ArrowRight, BadgeCheck, BriefcaseBusiness, Building2, Check,
+  ArrowDown, ArrowRight, BriefcaseBusiness, Building2, Check,
   ChevronDown, Clock3, Construction, ExternalLink, Gauge, Headphones,
-  MapPin, Menu, Phone, Quote, ShieldCheck, Star, Truck, Users,
+  CreditCard, MapPin, Menu, Phone, ShieldCheck, Truck, Users,
   Wrench, X, Zap
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
-const WHATSAPP = "https://wa.me/5555999642296";
-const MAP = "https://www.google.com/maps/dir/?api=1&destination=-30.3237506,-54.342669";
+const WHATSAPP_GUINCHO = "https://wa.me/5555999642296";
+const WHATSAPP_OFICINA = "https://wa.me/5555999777852";
+const INSTAGRAM = "https://www.instagram.com/batista_guinchos";
+const FACEBOOK = "https://www.facebook.com/share/1cXgV8vyD5/?mibextid=wwXIfr";
+const MAP = "https://www.google.com/maps/dir/?api=1&destination=Av.%20Francisco%20Hermenegildo%20da%20Silva%2C%20379%20-%20Esplanada%2C%20S%C3%A3o%20Gabriel%20-%20RS%2C%2097311-000";
 
 const services = [
-  { icon: Truck, title: "Guincho 24 horas", text: "Atendimento ágil para emergências em São Gabriel e região.", benefit: "Disponível todos os dias, a qualquer hora." },
-  { icon: Wrench, title: "Mecânica completa", text: "Diagnóstico, manutenção e reparos para veículos de passeio.", benefit: "Seu carro seguro e pronto para rodar." },
-  { icon: Construction, title: "Linha pesada", text: "Especialistas em caminhões, utilitários e veículos comerciais.", benefit: "Menos tempo parado, mais produtividade." },
-  { icon: Gauge, title: "Prancha e Munck", text: "Transporte técnico de máquinas, equipamentos e veículos especiais.", benefit: "Operação segura do início ao fim." },
-  { icon: BriefcaseBusiness, title: "Atendimento a frotas", text: "Planos de manutenção e suporte para empresas e transportadoras.", benefit: "Previsibilidade e agilidade para sua operação." },
-  { icon: BadgeCheck, title: "Autopeças", text: "Peças selecionadas e orientação de quem entende de mecânica.", benefit: "A solução certa, sem perda de tempo." },
+  { icon: Truck, title: "Guincho 24 horas", text: "Atendimento com plataformas, transporte de cochos, prancha, munck e carretas.", benefit: "Agendamento e emergência a qualquer hora.", sector: "guincho" },
+  { icon: Wrench, title: "Mecânica leve e pesada", text: "Serviços mecânicos em geral para veículos leves e pesados.", benefit: "Atendimento completo para voltar à estrada.", sector: "oficina" },
+  { icon: Zap, title: "Socorro mecânico", text: "Atendimento de socorro mecânico em um raio de até 100 km.", benefit: "Ajuda técnica onde você precisar.", sector: "oficina" },
+  { icon: Gauge, title: "Prancha e Munck", text: "Movimentação e transporte de veículos, máquinas e equipamentos.", benefit: "Operação preparada para diferentes demandas.", sector: "guincho" },
+  { icon: Construction, title: "Transporte nacional", text: "Soluções de transporte para destinos em todo o Brasil.", benefit: "Alcance nacional para sua operação.", sector: "guincho" },
+  { icon: BriefcaseBusiness, title: "Empresas e frotas", text: "Atendimento para transportadoras, empresas, caminhões e máquinas.", benefit: "Agilidade e suporte para sua empresa.", sector: "guincho" },
 ];
 
 const gallery = [
@@ -29,30 +32,26 @@ const gallery = [
   ["Estrutura profissional", "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=1000&q=82"],
 ];
 
-const testimonials = [
-  { name: "Carlos M.", role: "Cliente Batista", text: "Atendimento excelente, equipe prestativa e serviço muito bem feito. Passaram segurança do começo ao fim." },
-  { name: "Rodrigo A.", role: "Motorista profissional", text: "Quando precisei do guincho, foram rápidos e cuidadosos. É o tipo de empresa que a gente salva no contato." },
-  { name: "Mariana F.", role: "Cliente local", text: "Transparência no orçamento e muita atenção no atendimento. Recomendo de olhos fechados." },
-];
-
 const faqs = [
   ["Vocês atendem caminhões?", "Sim. Trabalhamos com linha leve e linha pesada, incluindo caminhões, utilitários e veículos comerciais."],
   ["Vocês trabalham com empresas?", "Sim. Atendemos transportadoras, empresas e frotas com suporte programado e emergencial."],
   ["O guincho funciona 24 horas?", "Sim. O atendimento de guincho está disponível 24 horas em São Gabriel e região."],
-  ["Quais são as formas de pagamento?", "As condições são apresentadas pela equipe conforme o serviço. Fale conosco para consultar as opções disponíveis."],
-  ["Onde vocês estão localizados?", "Na Av. Francisco Chagas, 1866 — Centro, São Gabriel — RS."],
+  ["Quais são as formas de pagamento?", "Aceitamos dinheiro, Pix, cartões de débito e crédito e boleto mediante consulta de CPF ou CNPJ."],
+  ["Onde vocês estão localizados?", "Na Av. Francisco Hermenegildo da Silva, 379 — Esplanada, São Gabriel — RS."],
 ];
 
 const reveal = { initial: { opacity: 0, y: 28 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, amount: .18 }, transition: { duration: .65, ease: [0.22, 1, 0.36, 1] as const } };
 
 function Logo() {
   return <a className="logo" href="#inicio" aria-label="Mecânica e Guinchos Batista — início">
-    <span className="logo-mark">B</span><span><strong>Batista</strong><small>Mecânica & Guinchos</small></span>
+    <img src="/batista-logo.svg" alt="Batista Mecânica e Guinchos" />
   </a>;
 }
 
-function WhatsAppButton({ children = "Solicitar atendimento", className = "" }: { children?: React.ReactNode, className?: string }) {
-  return <a className={`btn btn-primary ${className}`} href={`${WHATSAPP}?text=${encodeURIComponent("Olá! Vim pelo site e preciso de atendimento.")}`} target="_blank" rel="noopener noreferrer" aria-label="Solicitar atendimento pelo WhatsApp">
+function WhatsAppButton({ children = "Solicitar atendimento", className = "", sector = "guincho" }: { children?: React.ReactNode, className?: string, sector?: "guincho" | "oficina" }) {
+  const base = sector === "oficina" ? WHATSAPP_OFICINA : WHATSAPP_GUINCHO;
+  const message = sector === "oficina" ? "Olá! Vim pelo site e preciso de atendimento na oficina." : "Olá! Vim pelo site e preciso de atendimento de guincho ou munck.";
+  return <a className={`btn btn-primary ${className}`} href={`${base}?text=${encodeURIComponent(message)}`} target="_blank" rel="noopener noreferrer" aria-label={`Solicitar atendimento pelo WhatsApp da ${sector}`}>
     <Phone size={18} /> {children} <ArrowRight size={17} />
   </a>;
 }
@@ -101,7 +100,7 @@ function Hero() {
         <a className="btn btn-outline" href="#servicos">Conheça nossos serviços <ArrowDown size={17} /></a>
       </motion.div>
       <motion.div className="hero-badges" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .8 }}>
-        <span><Star /> Nota 5,0 no Google</span><span><Truck /> Linha leve e pesada</span><span><Clock3 /> Atendimento 24 horas</span><span><ShieldCheck /> Quase 20 anos</span>
+        <span><Wrench /> Mecânica em geral</span><span><Truck /> Linha leve e pesada</span><span><Clock3 /> Guincho e munck 24h</span><span><ShieldCheck /> Quase 20 anos</span>
       </motion.div>
     </div>
     <div className="scroll-cue"><span>Explore</span><i /></div>
@@ -113,8 +112,8 @@ function SectionHeading({ eyebrow, title, copy }: { eyebrow: string, title: Reac
 }
 
 function Trust() {
-  const items = [[Star,"Nota 5,0 no Google"],[ShieldCheck,"Quase 20 anos"],[Truck,"Linha leve e pesada"],[Users,"Equipe especializada"],[Zap,"Atendimento rápido"],[Clock3,"Guincho 24 horas"]] as const;
-  return <section className="trust section"><div className="container"><SectionHeading eyebrow="Confiança comprovada" title={<>Por que centenas de clientes <em>confiam na Batista?</em></>} />
+  const items = [[ShieldCheck,"Quase 20 anos"],[Truck,"Linha leve e pesada"],[Users,"Equipe especializada"],[Zap,"Socorro em até 100 km"],[Clock3,"Guincho e munck 24h"],[Construction,"Transporte nacional"]] as const;
+  return <section className="trust section"><div className="container"><SectionHeading eyebrow="Experiência e estrutura" title={<>Por que escolher <em>a Batista?</em></>} />
     <div className="trust-grid">{items.map(([Icon, label], i) => <motion.article key={label} {...reveal} transition={{ ...reveal.transition, delay: i*.05 }}><Icon /><strong>{label}</strong><span>Compromisso em cada atendimento.</span></motion.article>)}</div>
   </div></section>;
 }
@@ -123,7 +122,7 @@ function Services() {
   return <section className="section light" id="servicos"><div className="container"><SectionHeading eyebrow="Soluções completas" title={<>Tudo o que seu veículo precisa, <em>em um só lugar.</em></>} copy="Da manutenção preventiva ao atendimento emergencial, você conta com uma equipe preparada para colocar seu veículo de volta na estrada." />
     <div className="services-grid">{services.map((s, i) => <motion.article className="service-card" key={s.title} {...reveal} transition={{ ...reveal.transition, delay: (i%3)*.08 }}>
       <div className="service-icon"><s.icon /></div><span className="service-number">0{i+1}</span><h3>{s.title}</h3><p>{s.text}</p><div className="benefit"><Check />{s.benefit}</div>
-      <a href={`${WHATSAPP}?text=${encodeURIComponent(`Olá! Gostaria de saber mais sobre ${s.title}.`)}`} target="_blank" rel="noopener noreferrer">Saiba mais <ArrowRight /></a>
+      <a href={`${s.sector === "oficina" ? WHATSAPP_OFICINA : WHATSAPP_GUINCHO}?text=${encodeURIComponent(`Olá! Vim pelo site e gostaria de saber mais sobre ${s.title}.`)}`} target="_blank" rel="noopener noreferrer">Saiba mais <ArrowRight /></a>
     </motion.article>)}</div>
   </div></section>;
 }
@@ -146,7 +145,7 @@ function Companies() {
 }
 
 function Counters() {
-  const counters = [["20+","Anos de mercado"],["5★","Avaliação média"],["24h","Atendimento"],["100%","Compromisso"]];
+  const counters = [["2007","Ano de fundação"],["100 km","Socorro mecânico"],["24h","Guinchos e muncks"],["Brasil","Transporte nacional"]];
   return <section className="counter-strip"><div className="container counter-grid">{counters.map(([n,l],i)=><motion.div key={l} {...reveal} transition={{...reveal.transition,delay:i*.08}}><strong>{n}</strong><span>{l}</span></motion.div>)}</div></section>;
 }
 
@@ -166,13 +165,14 @@ function Gallery() {
   </section>;
 }
 
-function Testimonials() {
-  const [active,setActive]=useState(0);
-  useEffect(()=>{const id=setInterval(()=>setActive(x=>(x+1)%testimonials.length),5000);return()=>clearInterval(id)},[]);
-  const t=testimonials[active];
-  return <section className="section testimonials"><div className="container testimonial-grid"><SectionHeading eyebrow="Quem conhece, recomenda" title={<>Confiança construída <em>atendimento por atendimento.</em></>} />
-    <div className="testimonial-card"><Quote /><div className="stars">{[1,2,3,4,5].map(x=><Star key={x}/>)}</div><AnimatePresence mode="wait"><motion.div key={active} initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-10}}><blockquote>“{t.text}”</blockquote><strong>{t.name}</strong><span>{t.role}</span></motion.div></AnimatePresence><div className="dots">{testimonials.map((_,i)=><button key={i} onClick={()=>setActive(i)} className={i===active?"active":""} aria-label={`Mostrar depoimento ${i+1}`}/>)}</div></div>
-  </div></section>
+function ServiceContacts() {
+  return <section className="section service-contacts"><div className="container"><SectionHeading eyebrow="Fale com o setor certo" title={<>Dois canais para um atendimento <em>mais rápido.</em></>} />
+    <div className="contact-sector-grid">
+      <motion.article {...reveal}><Wrench/><p className="eyebrow">Oficina</p><h3>Mecânica leve e pesada</h3><p>Segunda a sábado, das 8h às 12h e das 14h às 18h. Socorro mecânico em até 100 km.</p><strong>(55) 99977-7852</strong><WhatsAppButton sector="oficina">Chamar a oficina</WhatsAppButton></motion.article>
+      <motion.article {...reveal}><Truck/><p className="eyebrow">Atendimento 24 horas</p><h3>Guinchos e muncks</h3><p>Plataformas, transporte de cochos, prancha, munck, carretas e transporte para todo o Brasil.</p><strong>(55) 99964-2296</strong><WhatsAppButton>Chamar guincho 24h</WhatsAppButton></motion.article>
+    </div>
+    <motion.div className="payment-note" {...reveal}><CreditCard/><span><strong>Formas de pagamento</strong>Dinheiro, Pix, cartões de débito e crédito e boleto mediante consulta de CPF ou CNPJ.</span></motion.div>
+  </div></section>;
 }
 
 function Emergency() {
@@ -189,19 +189,20 @@ function FAQ() {
 function Location() {
   return <section className="section location" id="contato"><div className="container"><SectionHeading eyebrow="Estamos em São Gabriel" title={<>Fácil de encontrar.<br/><em>Prontos para atender.</em></>} />
     <div className="location-grid"><motion.div className="contact-card" {...reveal}>
-      <div><MapPin/><span><small>Endereço</small>Av. Francisco Chagas, 1866 — Centro<br/>São Gabriel — RS</span></div>
-      <div><Phone/><span><small>Telefone e WhatsApp</small>(55) 9 9964-2296</span></div>
-      <div><Clock3/><span><small>Oficina</small>Seg–Sex: 8h–18h30 • Sáb: 8h–12h30<br/>Guincho: 24 horas</span></div>
+      <div><MapPin/><span><small>Endereço</small>Av. Francisco Hermenegildo da Silva, 379 — Esplanada<br/>São Gabriel — RS • CEP 97311-000</span></div>
+      <div><Phone/><span><small>Oficina</small>(55) 99977-7852</span></div>
+      <div><Phone/><span><small>Guinchos e muncks 24h</small>(55) 99964-2296</span></div>
+      <div><Clock3/><span><small>Horário da oficina</small>Seg–Sáb: 8h–12h e 14h–18h<br/>Guinchos e muncks: 24 horas</span></div>
       <a className="btn btn-primary" href={MAP} target="_blank" rel="noopener noreferrer">Como chegar <ExternalLink /></a>
     </motion.div>
-    <motion.a className="map-card" href={MAP} target="_blank" rel="noopener noreferrer" {...reveal} aria-label="Abrir localização no Google Maps"><div className="map-pattern"/><div className="map-pin"><MapPin/></div><span><strong>Mecânica e Guinchos Batista</strong>Av. Francisco Chagas, 1866<small>Abrir no Google Maps <ExternalLink/></small></span></motion.a></div>
+    <motion.a className="map-card" href={MAP} target="_blank" rel="noopener noreferrer" {...reveal} aria-label="Abrir localização no Google Maps"><div className="map-pattern"/><div className="map-pin"><MapPin/></div><span><strong>Mecânica e Guinchos Batista</strong>Av. Francisco Hermenegildo da Silva, 379 — Esplanada<small>Abrir no Google Maps <ExternalLink/></small></span></motion.a></div>
   </div></section>;
 }
 
 function Footer() {
-  return <footer><div className="container footer-grid"><div><Logo/><p>Mecânica completa, linha leve e pesada e guincho 24 horas em São Gabriel e região.</p><div className="socials"><a href="https://instagram.com/batista_guinchos" target="_blank" rel="noopener noreferrer" aria-label="Instagram">IG</a><a href="#" aria-label="Facebook">f</a></div></div>
+  return <footer><div className="container footer-grid"><div><Logo/><p>Mecânica completa, linha leve e pesada, guinchos e muncks 24 horas e transporte para todo o Brasil.</p><div className="socials"><a href={INSTAGRAM} target="_blank" rel="noopener noreferrer" aria-label="Instagram">IG</a><a href={FACEBOOK} target="_blank" rel="noopener noreferrer" aria-label="Facebook">f</a></div></div>
     <div><strong>Links rápidos</strong><a href="#servicos">Serviços</a><a href="#empresas">Empresas</a><a href="#estrutura">Estrutura</a><a href="#contato">Contato</a></div>
-    <div><strong>Contato</strong><a href={WHATSAPP}>(55) 9 9964-2296</a><span>Av. Francisco Chagas, 1866</span><a href="https://instagram.com/batista_guinchos">@batista_guinchos</a></div>
+    <div><strong>Contato</strong><a href={WHATSAPP_OFICINA}>Oficina: (55) 99977-7852</a><a href={WHATSAPP_GUINCHO}>Guinchos: (55) 99964-2296</a><span>Av. Francisco Hermenegildo da Silva, 379 — Esplanada</span><a href={INSTAGRAM}>@batista_guinchos</a></div>
   </div><div className="container footer-bottom"><span>© 2026 Mecânica e Guinchos Batista.</span><span>Uma demonstração profissional por <strong>Posiciona Digital</strong></span></div></footer>
 }
 
@@ -209,7 +210,7 @@ export default function Home() {
   const [loading,setLoading]=useState(true);
   useEffect(()=>{const id=setTimeout(()=>setLoading(false),650);return()=>clearTimeout(id)},[]);
   return <><AnimatePresence>{loading&&<motion.div className="loader" exit={{opacity:0}}><div className="loader-logo">B</div><span>BATISTA</span><i/></motion.div>}</AnimatePresence>
-    <Navbar/><main><Hero/><Trust/><Services/><Process/><Companies/><Counters/><Differentials/><Gallery/><Testimonials/><Emergency/><FAQ/><Location/></main><Footer/>
-    <a className="floating-whatsapp" href={WHATSAPP} target="_blank" rel="noopener noreferrer" aria-label="Chamar no WhatsApp"><Phone/><span>Atendimento 24h</span></a>
+    <Navbar/><main><Hero/><Trust/><Services/><ServiceContacts/><Process/><Companies/><Counters/><Differentials/><Gallery/><Emergency/><FAQ/><Location/></main><Footer/>
+    <a className="floating-whatsapp" href={WHATSAPP_GUINCHO} target="_blank" rel="noopener noreferrer" aria-label="Chamar guincho ou munck pelo WhatsApp"><Phone/><span>Guincho 24h</span></a>
   </>;
 }

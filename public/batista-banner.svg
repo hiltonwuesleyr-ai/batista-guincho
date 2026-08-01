@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 700" role="img" aria-labelledby="title desc">
+  <title id="title">Batista Mecânica e Guinchos</title>
+  <desc id="desc">Banner institucional da Batista com contato do guincho 24 horas.</desc>
+  <defs><radialGradient id="glow" cx="50%" cy="40%" r="65%"><stop offset="0" stop-color="#1d1d1f"/><stop offset="1" stop-color="#060607"/></radialGradient></defs>
+  <rect width="1600" height="700" fill="url(#glow)"/>
+  <path d="M0 0h1600v700H0z" fill="none" stroke="#2b2b2e" stroke-width="2"/>
+  <text x="800" y="285" fill="#fff" text-anchor="middle" font-family="Arial Black, Impact, sans-serif" font-size="185" font-weight="900" font-style="italic" letter-spacing="8">BATISTA</text>
+  <path d="M415 325H1185M415 352H1185" stroke="#c62828" stroke-width="13"/>
+  <text x="800" y="455" fill="#fff" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="58" font-weight="600" letter-spacing="8">MECÂNICA <tspan fill="#c62828">|</tspan> GUINCHOS</text>
+  <text x="800" y="555" fill="#fff" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="52" font-weight="700" letter-spacing="9">(55) 99964-2296</text>
+  <text x="800" y="620" fill="#b9b9bd" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="600" letter-spacing="6">GUINCHOS E MUNCK 24 HORAS</text>
+</svg>
