@@ -4,7 +4,7 @@ import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion"
 import {
   ArrowDown, ArrowRight, BriefcaseBusiness, Building2, Check,
   ChevronDown, Clock3, Construction, ExternalLink, Gauge, Headphones,
-  CreditCard, MapPin, Menu, Phone, ShieldCheck, Truck, Users,
+  CreditCard, LocateFixed, MapPin, Menu, Phone, Send, ShieldCheck, Truck, Users,
   Wrench, X, Zap
 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -96,7 +96,7 @@ function Hero() {
         Especialistas em mecânica automotiva, linha leve, linha pesada e guincho 24 horas.
       </motion.p>
       <motion.div className="hero-actions" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .65 }}>
-        <WhatsAppButton>Solicitar atendimento</WhatsAppButton>
+        <a className="btn btn-primary" href="#pre-chamado"><Send size={18} /> Abrir pré-chamado <ArrowRight size={17} /></a>
         <a className="btn btn-outline" href="#servicos">Conheça nossos serviços <ArrowDown size={17} /></a>
       </motion.div>
       <motion.div className="hero-badges" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .8 }}>
@@ -175,6 +175,86 @@ function ServiceContacts() {
   </div></section>;
 }
 
+type CallType = "guincho" | "oficina";
+
+function PreCall() {
+  const [callType, setCallType] = useState<CallType>("guincho");
+  const [location, setLocation] = useState("");
+  const [locating, setLocating] = useState(false);
+  const [locationError, setLocationError] = useState("");
+
+  const useCurrentLocation = () => {
+    if (!navigator.geolocation) {
+      setLocationError("Seu aparelho não oferece localização automática. Digite o endereço abaixo.");
+      return;
+    }
+    setLocating(true);
+    setLocationError("");
+    navigator.geolocation.getCurrentPosition(
+      ({ coords }) => {
+        setLocation(`https://www.google.com/maps?q=${coords.latitude},${coords.longitude}`);
+        setLocating(false);
+      },
+      () => {
+        setLocationError("Não foi possível obter sua localização. Autorize o acesso ou digite o endereço.");
+        setLocating(false);
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+    );
+  };
+
+  const sendCall = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const labels: Record<CallType, string> = { guincho: "Guincho, munck ou transporte", oficina: "Oficina ou socorro mecânico" };
+    const lines = [
+      "Olá! Vim pelo site e gostaria de abrir um pré-chamado.",
+      "",
+      `*Atendimento:* ${labels[callType]}`,
+      `*Nome:* ${form.get("name")}`,
+      `*Telefone:* ${form.get("phone")}`,
+      `*Veículo:* ${form.get("vehicle")}`,
+      `*Serviço necessário:* ${form.get("service")}`,
+      `*Problema aparente:* ${form.get("problem") || "Não informado"}`,
+      `*Localização atual:* ${location || form.get("address") || "Não informada"}`,
+      `*Destino desejado:* ${form.get("destination") || "Não informado"}`,
+      `*Observações:* ${form.get("notes") || "Nenhuma"}`,
+      "",
+      "Aguardo a confirmação da equipe."
+    ];
+    const base = callType === "oficina" ? WHATSAPP_OFICINA : WHATSAPP_GUINCHO;
+    window.open(`${base}?text=${encodeURIComponent(lines.join("\n"))}`, "_blank", "noopener,noreferrer");
+  };
+
+  return <section className="section pre-call" id="pre-chamado"><div className="container pre-call-grid">
+    <motion.div className="pre-call-intro" {...reveal}>
+      <p className="eyebrow">Atendimento mais rápido</p>
+      <h2>Envie as informações <em>antes de chamar.</em></h2>
+      <p>Informe o veículo, a necessidade e sua localização. A mensagem será organizada e enviada ao setor correto pelo WhatsApp.</p>
+      <div className="pre-call-assurance"><ShieldCheck /><span><strong>Sem espera dentro do site</strong>O pré-chamado abre diretamente no seu WhatsApp. O atendimento só é confirmado após o retorno da equipe.</span></div>
+      <a className="direct-call" href={`${WHATSAPP_GUINCHO}?text=${encodeURIComponent("Olá! Preciso de guincho ou socorro agora.")}`} target="_blank" rel="noopener noreferrer"><Phone /> Emergência? Chamar agora sem preencher</a>
+    </motion.div>
+    <motion.form className="pre-call-form" onSubmit={sendCall} {...reveal}>
+      <fieldset className="call-type"><legend>Qual atendimento você precisa?</legend>
+        <label className={callType === "guincho" ? "selected" : ""}><input type="radio" name="callType" value="guincho" checked={callType === "guincho"} onChange={() => setCallType("guincho")} /><Truck /><span><strong>Guincho ou munck</strong>Atendimento 24 horas</span></label>
+        <label className={callType === "oficina" ? "selected" : ""}><input type="radio" name="callType" value="oficina" checked={callType === "oficina"} onChange={() => setCallType("oficina")} /><Wrench /><span><strong>Oficina ou socorro</strong>Leve e pesado</span></label>
+      </fieldset>
+      <div className="form-grid">
+        <label><span>Seu nome *</span><input name="name" required autoComplete="name" placeholder="Como podemos chamar você?" /></label>
+        <label><span>Telefone *</span><input name="phone" required inputMode="tel" autoComplete="tel" placeholder="(55) 99999-9999" /></label>
+        <label><span>Tipo de veículo *</span><select name="vehicle" required defaultValue=""><option value="" disabled>Selecione</option><option>Carro</option><option>Utilitário</option><option>Caminhão</option><option>Máquina ou equipamento</option><option>Outro</option></select></label>
+        <label><span>Serviço necessário *</span><select name="service" required defaultValue=""><option value="" disabled>Selecione</option>{callType === "guincho" ? <><option>Guincho / plataforma</option><option>Munck</option><option>Prancha</option><option>Carreta</option><option>Transporte de cocho</option><option>Outro transporte</option></> : <><option>Atendimento na oficina</option><option>Socorro mecânico</option><option>Mecânica leve</option><option>Mecânica pesada</option><option>Não sei informar</option></>}</select></label>
+        <label className="full"><span>Problema aparente <small>(opcional)</small></span><input name="problem" placeholder="Ex.: veículo não liga, pneu danificado..." /></label>
+        <div className="full location-field"><span>Onde você está?</span><button type="button" onClick={useCurrentLocation} disabled={locating}><LocateFixed /> {locating ? "Obtendo localização..." : location ? "Localização adicionada ✓" : "Usar minha localização atual"}</button><em>ou</em><input name="address" disabled={Boolean(location)} placeholder="Digite rua, rodovia, km ou ponto de referência" />{locationError && <small role="alert">{locationError}</small>}</div>
+        <label className="full"><span>Destino desejado <small>(opcional)</small></span><input name="destination" placeholder="Para onde o veículo deve ser levado?" /></label>
+        <label className="full"><span>Observações <small>(opcional)</small></span><textarea name="notes" rows={3} placeholder="Carga, quantidade de passageiros ou outra informação importante" /></label>
+      </div>
+      <button className="btn btn-primary submit-call" type="submit"><Send /> Enviar pré-chamado pelo WhatsApp <ArrowRight /></button>
+      <p className="form-notice">Ao enviar, você será direcionado ao WhatsApp. O envio não confirma o atendimento; aguarde o retorno da equipe Batista.</p>
+    </motion.form>
+  </div></section>;
+}
+
 function Emergency() {
   return <section className="emergency" id="emergencia"><div className="container"><motion.div {...reveal}><div className="pulse-icon"><Headphones /></div><p className="eyebrow">Atendimento emergencial 24h</p><h2>Precisando de um<br /><em>guincho agora?</em></h2><p>Nossa equipe está pronta para atender você.</p><WhatsAppButton className="emergency-btn">Chamar no WhatsApp</WhatsAppButton><span className="emergency-phone"><Phone /> (55) 9 9964-2296</span></motion.div></div></section>;
 }
@@ -210,7 +290,7 @@ export default function Home() {
   const [loading,setLoading]=useState(true);
   useEffect(()=>{const id=setTimeout(()=>setLoading(false),650);return()=>clearTimeout(id)},[]);
   return <><AnimatePresence>{loading&&<motion.div className="loader" exit={{opacity:0}}><div className="loader-logo">B</div><span>BATISTA</span><i/></motion.div>}</AnimatePresence>
-    <Navbar/><main><Hero/><Trust/><Services/><ServiceContacts/><Process/><Companies/><Counters/><Differentials/><Gallery/><Emergency/><FAQ/><Location/></main><Footer/>
+    <Navbar/><main><Hero/><Trust/><Services/><ServiceContacts/><PreCall/><Process/><Companies/><Counters/><Differentials/><Gallery/><Emergency/><FAQ/><Location/></main><Footer/>
     <a className="floating-whatsapp" href={WHATSAPP_GUINCHO} target="_blank" rel="noopener noreferrer" aria-label="Chamar guincho ou munck pelo WhatsApp"><Phone/><span>Guincho 24h</span></a>
   </>;
 }
