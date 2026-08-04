@@ -4,7 +4,7 @@ import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion"
 import {
   ArrowDown, ArrowRight, BriefcaseBusiness, Building2, Check,
   ChevronDown, Clock3, Construction, ExternalLink, Gauge, Headphones,
-  CreditCard, LocateFixed, MapPin, Menu, Phone, Send, ShieldCheck, Truck, Users,
+  CreditCard, FileCheck2, LocateFixed, MapPin, Menu, Phone, ReceiptText, Send, ShieldCheck, Truck, Users,
   Wrench, X, Zap
 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -16,12 +16,12 @@ const FACEBOOK = "https://www.facebook.com/share/1cXgV8vyD5/?mibextid=wwXIfr";
 const MAP = "https://www.google.com/maps/dir/?api=1&destination=Av.%20Francisco%20Hermenegildo%20da%20Silva%2C%20379%20-%20Esplanada%2C%20S%C3%A3o%20Gabriel%20-%20RS%2C%2097311-000";
 
 const services = [
-  { icon: Truck, title: "Guincho 24 horas", text: "Atendimento com plataformas, transporte de cochos, prancha, munck e carretas.", benefit: "Agendamento e emergência a qualquer hora.", sector: "guincho" },
+  { icon: Truck, title: "Guincho 24 horas", text: "Atendimento com caminhões plataforma, pranchas cocho, carretas prancha e muncks.", benefit: "Agendamento e emergência a qualquer hora.", sector: "guincho" },
   { icon: Wrench, title: "Mecânica leve e pesada", text: "Serviços mecânicos em geral para veículos leves e pesados.", benefit: "Atendimento completo para voltar à estrada.", sector: "oficina" },
   { icon: Zap, title: "Socorro mecânico", text: "Atendimento de socorro mecânico em um raio de até 100 km.", benefit: "Ajuda técnica onde você precisar.", sector: "oficina" },
   { icon: Gauge, title: "Prancha e Munck", text: "Movimentação e transporte de veículos, máquinas e equipamentos.", benefit: "Operação preparada para diferentes demandas.", sector: "guincho" },
   { icon: Construction, title: "Transporte nacional", text: "Soluções de transporte para destinos em todo o Brasil.", benefit: "Alcance nacional para sua operação.", sector: "guincho" },
-  { icon: BriefcaseBusiness, title: "Empresas e frotas", text: "Atendimento para transportadoras, empresas, caminhões e máquinas.", benefit: "Agilidade e suporte para sua empresa.", sector: "guincho" },
+  { icon: BriefcaseBusiness, title: "Empresas e frotas", text: "Atendimento para transportadoras, seguradoras, locadoras, empresas, caminhões e máquinas.", benefit: "Agilidade e suporte para sua operação.", sector: "guincho" },
 ];
 
 const gallery = [
@@ -34,7 +34,7 @@ const gallery = [
 
 const faqs = [
   ["Vocês atendem caminhões?", "Sim. Trabalhamos com linha leve e linha pesada, incluindo caminhões, utilitários e veículos comerciais."],
-  ["Vocês trabalham com empresas?", "Sim. Atendemos transportadoras, empresas e frotas com suporte programado e emergencial."],
+  ["Vocês trabalham com empresas?", "Sim. Atendemos transportadoras, seguradoras, locadoras, empresas e frotas com suporte programado e emergencial."],
   ["O guincho funciona 24 horas?", "Sim. O atendimento de guincho está disponível 24 horas em São Gabriel e região."],
   ["Quais são as formas de pagamento?", "Aceitamos dinheiro, Pix, cartões de débito e crédito e boleto mediante consulta de CPF ou CNPJ."],
   ["Onde vocês estão localizados?", "Na Av. Francisco Hermenegildo da Silva, 379 — Esplanada, São Gabriel — RS."],
@@ -136,11 +136,25 @@ function Process() {
 
 function Companies() {
   return <section className="section companies" id="empresas"><div className="container companies-grid">
-    <motion.div {...reveal}><p className="eyebrow">Atendimento corporativo</p><h2>Sua frota não pode parar.<br /><em>Nós sabemos disso.</em></h2><p className="lead">Atendimento técnico para transportadoras, empresas, frotas, caminhões e máquinas com agilidade, confiabilidade e comunicação clara.</p>
-      <div className="check-grid">{["Agilidade no atendimento","Manutenção programada","Equipe especializada","Suporte emergencial"].map(x=><span key={x}><Check />{x}</span>)}</div>
+    <motion.div {...reveal}><p className="eyebrow">Atendimento corporativo</p><h2>Sua operação não pode parar.<br /><em>Nós sabemos disso.</em></h2><p className="lead">Atendimento técnico para transportadoras, seguradoras, locadoras, empresas, frotas, caminhões e máquinas com agilidade, confiabilidade e comunicação clara.</p>
+      <div className="check-grid">{["Seguradoras e locadoras","Transportadoras e frotas","Equipe especializada","Suporte emergencial"].map(x=><span key={x}><Check />{x}</span>)}</div>
       <WhatsAppButton>Falar sobre minha frota</WhatsAppButton>
     </motion.div>
-    <motion.div className="company-visual" {...reveal}><img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=1200&q=85" alt="Caminhões representando o atendimento a frotas e linha pesada" loading="lazy" /><div><Building2 /><span><strong>Atendimento B2B</strong>Frotas, empresas e transportadoras</span></div></motion.div>
+    <motion.div className="company-visual" {...reveal}><img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=1200&q=85" alt="Caminhões representando o atendimento a empresas, frotas, seguradoras e locadoras" loading="lazy" /><div><Building2 /><span><strong>Atendimento B2B</strong>Empresas, frotas, seguradoras e locadoras</span></div></motion.div>
+  </div></section>;
+}
+
+function Compliance() {
+  const documents = [
+    { icon: FileCheck2, title: "CT-e", name: "Conhecimento de Transporte Eletrônico", text: "Documento fiscal eletrônico da prestação de transporte, emitido quando aplicável à operação." },
+    { icon: ShieldCheck, title: "CIOT", name: "Código Identificador da Operação de Transporte", text: "Registro que identifica e dá rastreabilidade à operação de transporte rodoviário remunerado de cargas, conforme a regulamentação aplicável." },
+    { icon: Truck, title: "MDF-e", name: "Manifesto Eletrônico de Documentos Fiscais", text: "Documento eletrônico que vincula os documentos fiscais transportados à unidade de carga utilizada, quando aplicável." },
+    { icon: ReceiptText, title: "Notas fiscais", name: "Serviços e peças", text: "Emissão de nota fiscal de serviço e nota fiscal de peças para documentar corretamente cada atendimento." },
+  ];
+  return <section className="section compliance"><div className="container">
+    <SectionHeading eyebrow="Documentação e conformidade" title={<>Transporte documentado.<br/><em>Operação com segurança.</em></>} copy="A Batista trabalha com a documentação fiscal e operacional necessária para atender empresas, seguradoras, locadoras, transportadoras e clientes particulares com transparência." />
+    <div className="compliance-grid">{documents.map((item,i)=><motion.article key={item.title} {...reveal} transition={{...reveal.transition,delay:i*.07}}><item.icon/><span>{item.title}</span><h3>{item.name}</h3><p>{item.text}</p></motion.article>)}</div>
+    <motion.p className="compliance-note" {...reveal}><ShieldCheck/> A emissão de cada documento observa o tipo de serviço, o enquadramento e a legislação aplicável à operação.</motion.p>
   </div></section>;
 }
 
@@ -169,7 +183,7 @@ function ServiceContacts() {
   return <section className="section service-contacts"><div className="container"><SectionHeading eyebrow="Fale com o setor certo" title={<>Dois canais para um atendimento <em>mais rápido.</em></>} />
     <div className="contact-sector-grid">
       <motion.article {...reveal}><Wrench/><p className="eyebrow">Oficina</p><h3>Mecânica leve e pesada</h3><p>Segunda a sábado, das 8h às 12h e das 14h às 18h. Socorro mecânico em até 100 km.</p><strong>(55) 99977-7852</strong><WhatsAppButton sector="oficina">Chamar a oficina</WhatsAppButton></motion.article>
-      <motion.article {...reveal}><Truck/><p className="eyebrow">Atendimento 24 horas</p><h3>Guinchos e muncks</h3><p>Plataformas, transporte de cochos, prancha, munck, carretas e transporte para todo o Brasil.</p><strong>(55) 99964-2296</strong><WhatsAppButton>Chamar guincho 24h</WhatsAppButton></motion.article>
+      <motion.article {...reveal}><Truck/><p className="eyebrow">Atendimento 24 horas</p><h3>Guinchos e muncks</h3><p>Estrutura com 4 caminhões plataforma, 2 pranchas cocho para transporte de colheitadeiras, 3 carretas prancha e 2 muncks. Transporte para todo o Brasil.</p><strong>(55) 99964-2296</strong><WhatsAppButton>Chamar guincho 24h</WhatsAppButton></motion.article>
     </div>
     <motion.div className="payment-note" {...reveal}><CreditCard/><span><strong>Formas de pagamento</strong>Dinheiro, Pix, cartões de débito e crédito e boleto mediante consulta de CPF ou CNPJ.</span></motion.div>
   </div></section>;
@@ -243,7 +257,7 @@ function PreCall() {
         <label><span>Seu nome *</span><input name="name" required autoComplete="name" placeholder="Como podemos chamar você?" /></label>
         <label><span>Telefone *</span><input name="phone" required inputMode="tel" autoComplete="tel" placeholder="(55) 99999-9999" /></label>
         <label><span>Tipo de veículo *</span><select name="vehicle" required defaultValue=""><option value="" disabled>Selecione</option><option>Carro</option><option>Utilitário</option><option>Caminhão</option><option>Máquina ou equipamento</option><option>Outro</option></select></label>
-        <label><span>Serviço necessário *</span><select name="service" required defaultValue=""><option value="" disabled>Selecione</option>{callType === "guincho" ? <><option>Guincho / plataforma</option><option>Munck</option><option>Prancha</option><option>Carreta</option><option>Transporte de cocho</option><option>Outro transporte</option></> : <><option>Atendimento na oficina</option><option>Socorro mecânico</option><option>Mecânica leve</option><option>Mecânica pesada</option><option>Não sei informar</option></>}</select></label>
+        <label><span>Serviço necessário *</span><select name="service" required defaultValue=""><option value="" disabled>Selecione</option>{callType === "guincho" ? <><option>Guincho / caminhão plataforma</option><option>Prancha cocho para colheitadeira</option><option>Carreta prancha</option><option>Munck</option><option>Outro transporte</option></> : <><option>Atendimento na oficina</option><option>Socorro mecânico</option><option>Mecânica leve</option><option>Mecânica pesada</option><option>Não sei informar</option></>}</select></label>
         <label className="full"><span>Problema aparente <small>(opcional)</small></span><input name="problem" placeholder="Ex.: veículo não liga, pneu danificado..." /></label>
         <div className="full location-field"><span>Onde você está?</span><button type="button" onClick={useCurrentLocation} disabled={locating}><LocateFixed /> {locating ? "Obtendo localização..." : location ? "Localização adicionada ✓" : "Usar minha localização atual"}</button><em>ou</em><input name="address" disabled={Boolean(location)} placeholder="Digite rua, rodovia, km ou ponto de referência" />{locationError && <small role="alert">{locationError}</small>}</div>
         <label className="full"><span>Destino desejado <small>(opcional)</small></span><input name="destination" placeholder="Para onde o veículo deve ser levado?" /></label>
@@ -290,7 +304,7 @@ export default function Home() {
   const [loading,setLoading]=useState(true);
   useEffect(()=>{const id=setTimeout(()=>setLoading(false),650);return()=>clearTimeout(id)},[]);
   return <><AnimatePresence>{loading&&<motion.div className="loader" exit={{opacity:0}}><div className="loader-logo">B</div><span>BATISTA</span><i/></motion.div>}</AnimatePresence>
-    <Navbar/><main><Hero/><Trust/><Services/><ServiceContacts/><PreCall/><Process/><Companies/><Counters/><Differentials/><Gallery/><Emergency/><FAQ/><Location/></main><Footer/>
+    <Navbar/><main><Hero/><Trust/><Services/><ServiceContacts/><PreCall/><Process/><Companies/><Compliance/><Counters/><Differentials/><Gallery/><Emergency/><FAQ/><Location/></main><Footer/>
     <a className="floating-whatsapp" href={WHATSAPP_GUINCHO} target="_blank" rel="noopener noreferrer" aria-label="Chamar guincho ou munck pelo WhatsApp"><Phone/><span>Guincho 24h</span></a>
   </>;
 }
